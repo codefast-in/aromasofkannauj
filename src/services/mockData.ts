@@ -1,13 +1,53 @@
 
 // Mock data for development until backend is integrated
-
+import im1  from "../assets/AND-EDP_GIFTSET_80ML_1_360x504.jpg"
+import im2 from "../assets/AND-EDP_GIFTSET_80ML_2_360x504.jpg"
+import im3 from "../assets/AND-EDP_GIFTSET_80ML_3_360x504.jpg"
+import im4 from "../assets/AND-EDP_GIFTSET_80ML_4_360x504.jpg"
+import im5 from "../assets/AND-EDP_GIFTSET_80ML_5_360x504.jpg"
+import im6 from "../assets/AND-MIST_GIFTSET_200ML_1_360x504.jpg"
+import im7 from "../assets/AND-MIST_GIFTSET_200ML_2_360x504.jpg"
+import im8 from "../assets/AND-MIST_GIFTSET_200ML_3_360x504.jpg"
+import im9 from "../assets/AND-MIST_GIFTSET_200ML_4_360x504.jpg"
+import im10 from "../assets/AND-MIST_GIFTSET_200ML_5_360x504.jpg"
+import im11 from "../assets/ARISTOCRAT_COASTAL_75ML_1_360x504.jpg"
+import im12 from "../assets/ARISTOCRAT_COASTAL_75ML_2_360x504.jpg"
+import im13 from "../assets/ARISTOCRAT_COASTAL_75ML_3_360x504.jpg"
+import im14 from "../assets/ARISTOCRAT_COASTAL_75ML_4_360x504.jpg"
+import im15 from "../assets/ARISTOCRAT_COASTAL_75ML_5_360x504.jpg"
+import im16 from "../assets/ARISTOCRAT_CORAL_75ML_1_360x504.jpg"
+import im17 from "../assets/ARISTOCRAT_CORAL_75ML_2_360x504.jpg"
+import im18 from "../assets/ARISTOCRAT_CORAL_75ML_3_360x504.jpg"
+import im19 from "../assets/ARISTOCRAT_CORAL_75ML_4_360x504.jpg"
+import im20 from "../assets/ARISTOCRAT_CORAL_75ML_5_360x504.jpg"
+import im21 from "../assets/AUTOGRAPH_EDP_100ML_1_360x504.jpg"
+import im22 from "../assets/AUTOGRAPH_EDP_100ML_2_360x504.jpg"
+import im23 from "../assets/AUTOGRAPH_EDP_100ML_3_360x504.jpg"
+import im24 from "../assets/AUTOGRAPH_EDP_100ML_4_360x504.jpg"
+import im25 from "../assets/AUTOGRAPH_EDP_100ML_5_360x504.jpg"
+import im26 from "../assets/MUSK_SILK_SUPREME_50ML_1_360x504.jpg"
+import im27 from "../assets/MUSK_SILK_SUPREME_50ML_2_360x504.jpg"
+import im28 from "../assets/MUSK_SILK_SUPREME_50ML_3_360x504.jpg"
+import im29 from "../assets/MUSK_SILK_SUPREME_50ML_4_360x504.jpg"
+import im30 from "../assets/MUSK_SILK_SUPREME_50ML_5_360x504.jpg"
+import im31 from "../assets/ROYAL-MISK-SAPPHIRE_CONCENTRATED_10ML_1_360x504.jpg"
+import im32 from "../assets/ROYAL-MISK-SAPPHIRE_CONCENTRATED_10ML_2_eac076ed-7781-45e8-9e84-d1051ba133b3_360x504.jpg"
+import im33 from "../assets/ROYAL-PEARL_CONCENTRATED_10ML_1_360x504.jpg"
+import im34 from "../assets/ROYAL-PEARL_CONCENTRATED_10ML_2_588b5246-7062-4094-bf5a-a17a675deb05_360x504.jpg"
+import im35 from "../assets/ROYAL-PEARL_CONCENTRATED_10ML_3_360x504.jpg"
+import im36 from "../assets/ROYAL-PEARL_CONCENTRATED_10ML_4_360x504.jpg"
+import im37 from "../assets/SHADOW_ICE_75ML_1_360x504.jpg"
+import im38 from "../assets/SHADOW_ICE_75ML_2_360x504.jpg"
+import im39 from "../assets/SHADOW_ICE_75ML_3_360x504.jpg"
+import im40 from "../assets/SHADOW_ICE_75ML_4_360x504.jpg"
+import im41 from "../assets/SHADOW_ICE_75ML_5_360x504.jpg"
 export const perfumes = [
   {
     id: "1",
     name: "Royal Oud",
     description: "A sophisticated fragrance with notes of oud, sandalwood, and musk, perfect for evening occasions.",
     price: 120.00,
-    images: ["/placeholder.svg"],
+    images: [im1,im2,im3,im4,im5],
     category: "Men",
     type: "Eau de Parfum",
     notes: ["Woody", "Oriental", "Spicy"],
@@ -25,7 +65,7 @@ export const perfumes = [
     name: "Rose Elixir",
     description: "A delicate blend of Bulgarian roses with hints of vanilla and amber, creating a feminine and long-lasting scent.",
     price: 95.00,
-    images: ["/placeholder.svg"],
+    images: [im6,im7,im8,im9,im10],
     category: "Women",
     type: "Eau de Parfum",
     notes: ["Floral", "Oriental"],
@@ -43,7 +83,7 @@ export const perfumes = [
     name: "Citrus Ocean",
     description: "A refreshing unisex fragrance with vibrant notes of citrus, sea salt, and light musk, perfect for everyday wear.",
     price: 85.00,
-    images: ["/placeholder.svg"],
+    images: [im11,im12,im13,im14,im15],
     category: "Unisex",
     type: "Eau de Toilette",
     notes: ["Citrus", "Aquatic"],
@@ -61,7 +101,7 @@ export const perfumes = [
     name: "Amber Nights",
     description: "A warm and sensual fragrance with amber, vanilla, and exotic spices, ideal for romantic evenings.",
     price: 110.00,
-    images: ["/placeholder.svg"],
+    images: [im16,im17,im18,im19,im20],
     category: "Women",
     type: "Eau de Parfum",
     notes: ["Oriental", "Spicy", "Gourmand"],
@@ -79,7 +119,7 @@ export const perfumes = [
     name: "Vetiver Legend",
     description: "A sophisticated masculine scent with vetiver, cedarwood, and leather notes, providing a distinctive character.",
     price: 105.00,
-    images: ["/placeholder.svg"],
+    images: [im21,im22,im23,im24,im25],
     category: "Men",
     type: "Eau de Toilette",
     notes: ["Woody", "Green"],
@@ -97,7 +137,7 @@ export const perfumes = [
     name: "Jasmine Dream",
     description: "A luxurious floral fragrance centered around jasmine with supporting notes of rose and lily, a true floral delight.",
     price: 130.00,
-    images: ["/placeholder.svg"],
+    images: [im26,im27,im28,im29,im30],
     category: "Women",
     type: "Eau de Parfum",
     notes: ["Floral"],
@@ -115,7 +155,7 @@ export const perfumes = [
     name: "Midnight Saffron",
     description: "An exotic blend of saffron, oud, and vanilla, creating a mysterious and enchanting aura.",
     price: 150.00,
-    images: ["/placeholder.svg"],
+    images: [im31,im32],
     category: "Unisex",
     type: "Perfume Oil",
     notes: ["Spicy", "Oriental"],
@@ -133,7 +173,7 @@ export const perfumes = [
     name: "Fresh Bergamot",
     description: "A light and refreshing scent featuring bergamot, lemon, and light musk, perfect for warm weather.",
     price: 80.00,
-    images: ["/placeholder.svg"],
+    images: [im33,im34,im35,im36],
     category: "Unisex",
     type: "Eau de Cologne",
     notes: ["Citrus", "Green"],
@@ -152,7 +192,7 @@ export const perfumes = [
     name: "Vanilla Dreams",
     description: "A sweet and comforting fragrance with rich vanilla, caramel, and a hint of coconut.",
     price: 90.00,
-    images: ["/placeholder.svg"],
+    images: [im37,im38,im39,im40,im41],
     category: "Women",
     type: "Eau de Parfum",
     notes: ["Gourmand", "Oriental"],
@@ -165,60 +205,7 @@ export const perfumes = [
     reviewCount: 16,
     featured: false
   },
-  {
-    id: "10",
-    name: "Cedar & Pine",
-    description: "A rugged outdoor fragrance with notes of cedar, pine, and fresh mountain air.",
-    price: 115.00,
-    images: ["/placeholder.svg"],
-    category: "Men",
-    type: "Eau de Toilette",
-    notes: ["Woody", "Green"],
-    sizes: [
-      { size: "50ml", price: 115.00 },
-      { size: "100ml", price: 190.00 }
-    ],
-    stock: 18,
-    rating: 4.4,
-    reviewCount: 13,
-    featured: false
-  },
-  {
-    id: "11",
-    name: "Mediterranean Breeze",
-    description: "A bright and invigorating scent capturing the essence of coastal Mediterranean herbs and citrus.",
-    price: 95.00,
-    images: ["/placeholder.svg"],
-    category: "Unisex",
-    type: "Eau de Toilette",
-    notes: ["Citrus", "Aquatic", "Green"],
-    sizes: [
-      { size: "50ml", price: 95.00 },
-      { size: "100ml", price: 170.00 }
-    ],
-    stock: 24,
-    rating: 4.5,
-    reviewCount: 19,
-    featured: true
-  },
-  {
-    id: "12",
-    name: "Lavender Fields",
-    description: "A calming and elegant fragrance featuring French lavender, bergamot, and vanilla.",
-    price: 88.00,
-    images: ["/placeholder.svg"],
-    category: "Women",
-    type: "Eau de Parfum",
-    notes: ["Floral", "Green"],
-    sizes: [
-      { size: "30ml", price: 88.00 },
-      { size: "50ml", price: 140.00 }
-    ],
-    stock: 16,
-    rating: 4.6,
-    reviewCount: 15,
-    featured: false
-  }
+  
 ];
 
 export const users = [

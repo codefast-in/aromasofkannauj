@@ -7,28 +7,29 @@ import { Loader2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { getFeaturedProducts } from '@/services/productService';
 import { useToast } from '@/hooks/use-toast';
+import { perfumes } from '@/services/mockData';
 
 const FeaturedProducts: React.FC = () => {
   const { toast } = useToast();
-
-  const { 
-    data: featuredProducts = [], 
-    isLoading,
-    error 
-  } = useQuery({
-    queryKey: ['featuredProducts'],
-    queryFn: getFeaturedProducts,
-    onError: (err) => {
-      console.error('Error fetching featured products:', err);
-      toast({
-        title: "Error loading products",
-        description: "Failed to load featured products. Please try again later.",
-        variant: "destructive",
-      });
-    },
-    staleTime: 300000, // 5 minutes
-    retry: 2
-  });
+const featuredProducts = perfumes.slice(0,6)
+  // const { 
+  //   data: featuredProducts = [], 
+  //   isLoading,
+  //   error 
+  // } = useQuery({
+  //   queryKey: ['featuredProducts'],
+  //   queryFn: getFeaturedProducts,
+  //   onError: (err) => {
+  //     console.error('Error fetching featured products:', err);
+  //     toast({
+  //       title: "Error loading products",
+  //       description: "Failed to load featured products. Please try again later.",
+  //       variant: "destructive",
+  //     });
+  //   },
+  //   staleTime: 300000, // 5 minutes
+  //   retry: 2
+  // });
 
   return (
     <section className="py-16 bg-secondary/30">
@@ -41,7 +42,7 @@ const FeaturedProducts: React.FC = () => {
             Discover our most sought-after fragrances, each carefully crafted to evoke emotion and create lasting impressions.
           </p>
         </div>
-        
+{/*         
         {isLoading ? (
           <div className="w-full flex justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -57,9 +58,11 @@ const FeaturedProducts: React.FC = () => {
               Retry
             </Button>
           </div>
-        ) : (
-          <ProductGrid products={featuredProducts} isLoading={isLoading} />
-        )}
+        ) : ( */}
+          <ProductGrid products={featuredProducts}
+          //  isLoading={isLoading}
+            />
+        {/*  )} */}
         
         <div className="mt-12 text-center">
           <Button variant="outline" asChild>

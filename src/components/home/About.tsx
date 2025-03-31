@@ -30,7 +30,7 @@ const About: React.FC = () => {
             <div className="relative">
               <div className="aspect-square rounded-lg overflow-hidden">
                 <img 
-                  src="/placeholder.svg" 
+                  src="https://imgs.search.brave.com/4GFreH6CM4SvyCf8qHxjpHC7G1hBnLqEyeZ1_n3-rgk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/bW9zLmNtcy5mdXR1/cmVjZG4ubmV0L0JQ/dW5YOGZGa2Y5aE1h/REtBZXFFU1MtMTA4/MC04MC5qcGc" 
                   alt="Perfume craftsmanship" 
                   className="w-full h-full object-cover"
                 />
@@ -38,7 +38,7 @@ const About: React.FC = () => {
               
               <div className="absolute -bottom-6 -left-6 w-1/2 aspect-square rounded-lg overflow-hidden border-4 border-white shadow-lg hidden md:block">
                 <img 
-                  src="/placeholder.svg" 
+                  src="https://imgs.search.brave.com/y-lDgogS2qoVFj1CN0PeguHd7U42u-cSSJoRLj--Vy0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2ZhLzVl/Lzg2L2ZhNWU4NmM5/Y2M2MGY0NDdjNGQx/MWExNTE0YmU4M2Jl/LmpwZw" 
                   alt="Perfume ingredients" 
                   className="w-full h-full object-cover"
                 />

@@ -2,11 +2,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-
+import bg from "../../assets/Signature_series.jpg"
 const Hero: React.FC = () => {
   return (
     <div className="relative overflow-hidden bg-gradient-to-r from-royal-purple/90 to-dark-purple">
-      <div className="absolute inset-0 bg-[url('/placeholder.svg')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+      <div className="absolute inset-0 bg-[url('https://imgs.search.brave.com/hqQDGso8EDkxZ7NCybZ9aLGwGeBAqRPGPLsak8lGb8M/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWdj/ZG4uc3RhYmxlZGlm/ZnVzaW9ud2ViLmNv/bS8yMDI0LzkvMjcv/MmRhM2UwMjgtYWEz/My00NWFmLTk4MmYt/NDUwOGQ1Nzc5ZDEw/LmpwZw')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
       
       <div className="container-custom relative z-10 py-20 md:py-32">
         <div className="max-w-2xl text-white">
