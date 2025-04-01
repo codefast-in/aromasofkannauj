@@ -50,33 +50,33 @@ const AboutPage = () => {
           <p className="text-lg mb-8">
             <span className="text-primary font-bold">
               Natural and Cruelty-Free
-            </span>{" "}
+            </span>
             <br />
             Our attars are free from synthetic chemicals, artificial fragrances,
             and animal-derived ingredients, making them perfect for those
-            seeking natural, cruelty-free products. <br />{" "}
+            seeking natural, cruelty-free products. <br />
             <span className="text-primary font-bold">
               Small Batch Production
-            </span>{" "}
+            </span>
             <br />
             We produce our attars in small batches to ensure consistency,
-            quality, and attention to detail. <br />{" "}
+            quality, and attention to detail. <br />
             <span className="text-primary font-bold">
               Expertly Crafted
-            </span>{" "}
+            </span>
             <br />
             Our skilled perfumers carefully craft each attar, using techniques
             passed down through generations.
             <br /> <span className="text-primary font-bold">
               Unique Blends
-            </span>{" "}
+            </span>
             <br />
             Our attars are expertly blended to create unique, captivating
             fragrances that evoke emotions and memories.
-            <br />{" "}
+            <br />
             <span className="text-primary font-bold">
               Sustainable Sourcing
-            </span>{" "}
+            </span>
             <br />
             We prioritize sustainability and ethical practices in sourcing our
             ingredients, ensuring a positive impact on the environment and local
@@ -90,17 +90,17 @@ const AboutPage = () => {
           <h2 className="text-2xl font-bold mb-4">Explore Our Collections</h2>
 
           <p className="text-lg mb-8">
-            <span className="text-primary font-bold">Classic Attars</span>{" "}
+            <span className="text-primary font-bold">Classic Attars</span>
             <br />
             Timeless fragrances that evoke the traditional perfumery of Kannauj.
             <br /> <span className="text-primary font-bold">
               Fusion Attars
-            </span>{" "}
+            </span>
             <br />
             Innovative blends that combine traditional Indian scents with modern
             twists.
-            <br />{" "}
-            <span className="text-primary font-bold">Seasonal Attars</span>{" "}
+            <br />
+            <span className="text-primary font-bold">Seasonal Attars</span>
             <br />
             Limited-edition fragrances crafted to capture the essence of each
             season.
@@ -117,13 +117,13 @@ const AboutPage = () => {
           <p className="text-lg mb-8">
             <span className="text-primary font-bold">Authenticity</span> <br />
             We're committed to preserving the traditional methods and recipes of
-            Kannauj's perfumery heritage. <br />{" "}
+            Kannauj's perfumery heritage. <br />
             <span className="text-primary font-bold">Quality</span> <br />
             We use only the finest, sustainably sourced essential oils to ensure
-            exceptional fragrance quality. <br />{" "}
+            exceptional fragrance quality. <br />
             <span className="text-primary font-bold">
               Customer Satisfaction
-            </span>{" "}
+            </span>
             <br />
             We're dedicated to providing exceptional customer service and
             ensuring your complete satisfaction.
