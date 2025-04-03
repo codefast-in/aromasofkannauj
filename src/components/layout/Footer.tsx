@@ -110,7 +110,7 @@ const Footer: React.FC = () => {
         {/* Copyright */}
         <div className="mt-8 text-center border-t border-gray-700 pt-6">
           <p className="text-gray-400 text-sm">
-            © {currentYear} Raahi Parfums. All rights reserved.
+            © {currentYear} Aromas of Kannauj. All rights reserved.
           </p>
         </div>
       </div>
