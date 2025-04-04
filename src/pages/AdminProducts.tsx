@@ -1,17 +1,16 @@
-
-import React, { useState, useEffect } from 'react';
-import AdminLayout from '@/components/admin/AdminLayout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from '@/components/ui/table';
-import { Edit, Trash2, Search, Plus, Loader2 } from 'lucide-react';
+import React, {useState, useEffect} from "react";
+import AdminLayout from "@/components/admin/AdminLayout";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {Edit, Trash2, Search, Plus, Loader2} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -19,81 +18,83 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { GENDER_CATEGORIES } from '@/config/constants';
-import AdminProductDialog from '@/components/admin/AdminProductDialog';
-import { useToast } from '@/hooks/use-toast';
-import { getProducts, deleteProduct } from '@/services/productService';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {GENDER_CATEGORIES} from "@/config/constants";
+import AdminProductDialog from "@/components/admin/AdminProductDialog";
+import {useToast} from "@/hooks/use-toast";
+import {getProducts, deleteProduct} from "@/services/productService";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {productAPI} from "@/services/api";
 
 const AdminProducts = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
-  const { toast } = useToast();
+  const {toast} = useToast();
   const queryClient = useQueryClient();
-  
+
   // Setup query params
   const params = {
     search: searchTerm,
-    category: categoryFilter !== 'all' ? categoryFilter : '',
+    category: categoryFilter !== "all" ? categoryFilter : "",
     limit: 50, // Higher limit for admin view
   };
-  
+
   // Fetch products with react-query
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['admin-products', params],
+  const {data, isLoading, error, refetch} = useQuery({
+    queryKey: ["admin-products", params],
     queryFn: () => getProducts(params),
   });
-  
+
   // Handle search with debounce
   useEffect(() => {
     const timer = setTimeout(() => {
       refetch();
     }, 500);
-    
+
     return () => clearTimeout(timer);
   }, [searchTerm, categoryFilter, refetch]);
-  
+
   const products = data?.products || [];
-  
+
   const handleAddProduct = () => {
     setEditingProduct(null);
     setIsAddProductOpen(true);
   };
-  
+
   const handleEditProduct = (product: any) => {
     setEditingProduct(product);
     setIsAddProductOpen(true);
   };
-  
+
   const handleDeleteProduct = async (productId: string) => {
-    if (confirm('Are you sure you want to delete this product?')) {
+    if (confirm("Are you sure you want to delete this product?")) {
       try {
-        await deleteProduct(productId);
+        await productAPI.delete(productId);
+        deleteProduct(productId);
         toast({
           title: "Product deleted",
           description: "The product has been successfully deleted.",
-          variant: "default"
+          variant: "default",
         });
         // Refresh the product list
-        queryClient.invalidateQueries({ queryKey: ['admin-products'] });
+        queryClient.invalidateQueries({queryKey: ["admin-products"]});
       } catch (error) {
-        console.error('Error deleting product:', error);
+        console.error("Error deleting product:", error);
         toast({
           title: "Error",
           description: "Failed to delete product. Please try again.",
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }
   };
-  
+
   const handleSuccess = () => {
     // Invalidate and refetch
-    queryClient.invalidateQueries({ queryKey: ['admin-products'] });
+    queryClient.invalidateQueries({queryKey: ["admin-products"]});
   };
-  
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -104,10 +105,13 @@ const AdminProducts = () => {
             Add Product
           </Button>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="relative md:col-span-2">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
+            <Search
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
+              size={18}
+            />
             <Input
               placeholder="Search products..."
               className="pl-10"
@@ -115,7 +119,7 @@ const AdminProducts = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          
+
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
             <SelectTrigger>
               <SelectValue placeholder="All Categories" />
@@ -130,7 +134,7 @@ const AdminProducts = () => {
             </SelectContent>
           </Select>
         </div>
-        
+
         <div className="rounded-md border">
           <Table>
             <TableHeader>
@@ -154,13 +158,17 @@ const AdminProducts = () => {
                 </TableRow>
               ) : error ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-red-500">
+                  <TableCell
+                    colSpan={6}
+                    className="text-center py-8 text-red-500">
                     Error loading products. Please try again.
                   </TableCell>
                 </TableRow>
               ) : products.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                  <TableCell
+                    colSpan={6}
+                    className="text-center py-8 text-muted-foreground">
                     No products found
                   </TableCell>
                 </TableRow>
@@ -176,27 +184,36 @@ const AdminProducts = () => {
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <span className="truncate max-w-[200px]">{product.name}</span>
+                        <span className="truncate max-w-[200px]">
+                          {product.name}
+                        </span>
                       </div>
                     </TableCell>
                     <TableCell>{product.category}</TableCell>
                     <TableCell>₹{product.price?.toFixed(2)}</TableCell>
                     <TableCell>{product.stock}</TableCell>
                     <TableCell>
-                      <span className={`inline-block px-2 py-1 rounded-full text-xs ${
-                        product.stock > 0 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
+                      <span
+                        className={`inline-block px-2 py-1 rounded-full text-xs ${
+                          product.stock > 0
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}>
+                        {product.stock > 0 ? "In Stock" : "Out of Stock"}
                       </span>
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end space-x-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEditProduct(product)}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleEditProduct(product)}>
                           <Edit size={16} />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDeleteProduct(product._id)}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDeleteProduct(product._id)}>
                           <Trash2 size={16} />
                         </Button>
                       </div>
@@ -208,7 +225,7 @@ const AdminProducts = () => {
           </Table>
         </div>
       </div>
-      
+
       <AdminProductDialog
         open={isAddProductOpen}
         onOpenChange={setIsAddProductOpen}

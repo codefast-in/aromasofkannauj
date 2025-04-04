@@ -1,5 +1,5 @@
-
-import { STORAGE_KEYS, API_URL } from "@/config/constants";
+import {STORAGE_KEYS, API_URL} from "@/config/constants";
+import { match } from "assert";
 import axios from "axios";
 
 // Storage utils
@@ -34,7 +34,7 @@ export const isAuthenticated = (): boolean => {
 
 export const isAdmin = (): boolean => {
   const user = getUser();
-  return user?.role === 'admin';
+  return user?.role === "admin";
 };
 
 // Axios instance
@@ -67,7 +67,7 @@ api.interceptors.response.use(
       // Token expired or invalid
       removeToken();
       removeUser();
-      window.location.href = '/login';
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }
@@ -77,96 +77,100 @@ api.interceptors.response.use(
 export const authAPI = {
   login: async (email: string, password: string) => {
     try {
-      const response = await api.post('/auth/login', { email, password });
+      const response = await api.post("/auth/login", {email, password});
+
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   },
-  
+
   register: async (userData: any) => {
     try {
-      const response = await api.post('/auth/register', userData);
+      const response = await api.post("/auth/register", userData);
       return response.data;
     } catch (error) {
       throw error;
     }
   },
-  
+
   logout: () => {
     removeToken();
     removeUser();
-  }
+  },
 };
 
 // Enhanced product API with pagination and filtering
 export const productAPI = {
-  getAll: async (params: {
-    page?: number;
-    limit?: number;
-    search?: string;
-    category?: string;
-    notes?: string;
-    types?: string;
-    minPrice?: number;
-    maxPrice?: number;
-    sort?: string;
-  } = {}) => {
+  getAll: async (
+    params: {
+      page?: number;
+      limit?: number;
+      search?: string;
+      category?: string;
+      notes?: string;
+      types?: string;
+      minPrice?: number;
+      maxPrice?: number;
+      sort?: string;
+    } = {}
+  ) => {
     try {
-      const response = await api.get('/products', { params });
+      const response = await api.get("product/getAll", {params});
       return response.data;
     } catch (error) {
       throw error;
     }
   },
-  
+
   getById: async (id: string) => {
     try {
-      const response = await api.get(`/products/${id}`);
+      const response = await api.get(`/product/get/${id}`);
       return response.data;
     } catch (error) {
       throw error;
     }
   },
-  
+
   create: async (productData: any) => {
     try {
-      const response = await api.post('/products', productData);
+      const response = await api.post("/product/create", productData);
       return response.data;
     } catch (error) {
       throw error;
     }
   },
-  
+
   update: async (id: string, productData: any) => {
     try {
-      const response = await api.put(`/products/${id}`, productData);
+      const response = await api.put(`/product/update/${id}`, productData);
       return response.data;
     } catch (error) {
       throw error;
     }
   },
-  
+
   delete: async (id: string) => {
     try {
-      const response = await api.delete(`/products/${id}`);
+      const response = await api.delete(`/product/delete/${id}`);
       return response.data;
     } catch (error) {
       throw error;
     }
-  }
+  },
 };
 
 export const orderAPI = {
   getAll: async (filters = {}) => {
     try {
-      const response = await api.get('/orders', { params: filters });
+      const response = await api.get("/orders", {params: filters});
       return response.data;
     } catch (error) {
       throw error;
     }
   },
-  
+
   getById: async (id: string) => {
     try {
       const response = await api.get(`/orders/${id}`);
@@ -175,16 +179,16 @@ export const orderAPI = {
       throw error;
     }
   },
-  
+
   create: async (orderData: any) => {
     try {
-      const response = await api.post('/orders', orderData);
+      const response = await api.post("/orders", orderData);
       return response.data;
     } catch (error) {
       throw error;
     }
   },
-  
+
   update: async (id: string, orderData: any) => {
     try {
       const response = await api.put(`/orders/${id}`, orderData);
@@ -192,19 +196,19 @@ export const orderAPI = {
     } catch (error) {
       throw error;
     }
-  }
+  },
 };
 
 export const userAPI = {
   getAll: async (params = {}) => {
     try {
-      const response = await api.get('/users', { params });
+      const response = await api.get("/users", {params});
       return response.data;
     } catch (error) {
       throw error;
     }
   },
-  
+
   getById: async (id: string) => {
     try {
       const response = await api.get(`/users/${id}`);
@@ -213,7 +217,7 @@ export const userAPI = {
       throw error;
     }
   },
-  
+
   update: async (id: string, userData: any) => {
     try {
       const response = await api.put(`/users/${id}`, userData);
@@ -221,26 +225,52 @@ export const userAPI = {
     } catch (error) {
       throw error;
     }
-  }
+  },
 };
 
 export const uploadAPI = {
   uploadImage: async (file: File) => {
     try {
       const formData = new FormData();
-      formData.append('image', file);
-      
-      const response = await api.post('/upload/image', formData, {
+      formData.append("image", file);
+
+      const response = await api.post("/upload/image", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
-      
+
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+};
+
+export const coponAPI = {
+  getAll: async () => {
+    try {
+      const response = await api.get("/coupon/getAll");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  create: async (couponData: any) => {
+    try {
+      const response = await api.post("/coupon/create", couponData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  match: async (code: string) => {
+    try {
+      const response = await api.get(`/coupon/match/${code}`);
       return response.data;
     } catch (error) {
       throw error;
     }
   }
 };
-
 export default api;

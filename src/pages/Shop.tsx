@@ -20,6 +20,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { GENDER_CATEGORIES, PERFUME_NOTES, PERFUME_TYPES } from '@/config/constants';
 import { getProducts } from '@/services/productService';
 import { useToast } from '@/hooks/use-toast';
+import { productAPI } from '@/services/api';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -80,7 +81,8 @@ const Shop = () => {
         sort: sortOption
       };
       
-      const result = await getProducts(params);
+      const result = await productAPI.getAll(params);
+      console.log(result);
       
       if (page === 1) {
         setProducts(result.products);
