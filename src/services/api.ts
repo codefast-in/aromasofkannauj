@@ -134,15 +134,17 @@ export const productAPI = {
   },
 
   create: async (productData: any) => {
+    console.log(productData)
     try {
       const response = await api.post("/product/create", productData);
       return response.data;
     } catch (error) {
       throw error;
     }
-  },
+  }, 
 
   update: async (id: string, productData: any) => {
+  
     try {
       const response = await api.put(`/product/update/${id}`, productData);
       return response.data;

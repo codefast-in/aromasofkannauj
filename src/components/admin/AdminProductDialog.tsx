@@ -172,27 +172,26 @@ const AdminProductDialog: React.FC<AdminProductDialogProps> = ({
           ...formData,
           images: formData.keepExistingImages ? images : imageFiles,
         };
-        const formDataToSend = new FormData();
-        Object.entries(updatedProduct).forEach(([key, value]) => {
-          if (key === "images") {
-            if (Array.isArray(value)) {
-              value.forEach((img, index) => {
-                if (typeof img === "string") {
-                  formDataToSend.append(`images[${index}]`, img);
-                } else {
-                  formDataToSend.append(`images[${index}]`, img, img.name);
-                }
-              });
-            }
-          } else {
-            formDataToSend.append(key, value.toString());
-          }
-        });
+
+        //   if (key === "images") {
+        //     if (Array.isArray(value)) {
+        //       value.forEach((img:any, index:number) => {
+        //         if (typeof img === "string") {
+        //           formDataToSend.append(`images[${index}]`, img);
+        //         } else {
+        //           formDataToSend.append(`images[${index}]`, img, img.name);
+        //         }
+        //       });
+        //     }
+        //   } else {
+        //     formDataToSend.append(key, value.toString());
+        //   }
+        // });
         // const imageFiles = formData.keepExistingImages ? [] : imageFiles;
 
-        productAPI.update(product._id || product.id, formDataToSend);
+        productAPI.update(product._id || product.id, updatedProduct);
 
-        // await updateProduct(product._id || product.id, formData, imageFiles);
+    
         toast({
           title: "Success",
           description: "Product updated successfully",
@@ -215,6 +214,7 @@ const AdminProductDialog: React.FC<AdminProductDialogProps> = ({
         onSuccess();
       }
     } catch (error) {
+      console.log(error);
       console.error("Error saving product:", error);
       toast({
         title: "Error",

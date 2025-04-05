@@ -30,6 +30,9 @@ const AdminProducts = () => {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [products, setProducts] = useState<any[]>([]);
   const {toast} = useToast();
   const queryClient = useQueryClient();
 
@@ -40,22 +43,50 @@ const AdminProducts = () => {
     limit: 50, // Higher limit for admin view
   };
 
-  // Fetch products with react-query
-  const {data, isLoading, error, refetch} = useQuery({
-    queryKey: ["admin-products", params],
-    queryFn: () => getProducts(params),
-  });
+  // // Fetch products with react-query
+  // const {data, isLoading, error, refetch} = useQuery({
+  //   queryKey: ["admin-products", params],
+  //   queryFn: () => getProducts(params),
+  // });
 
+  const refatch = () => {
+    productAPI
+      .getAll(params)
+      .then((response) => {
+        setProducts(response.products);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setIsLoading(false);
+      });
+  };
   // Handle search with debounce
   useEffect(() => {
-    const timer = setTimeout(() => {
-      refetch();
-    }, 500);
+    const delayDebounceFn = setTimeout(() => {
+      setSearchTerm(searchTerm);
+    }, 300);
 
-    return () => clearTimeout(timer);
-  }, [searchTerm, categoryFilter, refetch]);
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
-  const products = data?.products || [];
+  useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+    productAPI
+      .getAll(params)
+      .then((response) => {
+        setProducts(response.products);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setIsLoading(false);
+      });
+    setIsLoading(false);
+  }, [searchTerm, categoryFilter]);
+
+  // const products = data?.products || [];
 
   const handleAddProduct = () => {
     setEditingProduct(null);
@@ -71,14 +102,14 @@ const AdminProducts = () => {
     if (confirm("Are you sure you want to delete this product?")) {
       try {
         await productAPI.delete(productId);
-        deleteProduct(productId);
+        // deleteProduct(productId);
         toast({
           title: "Product deleted",
           description: "The product has been successfully deleted.",
           variant: "default",
         });
         // Refresh the product list
-        queryClient.invalidateQueries({queryKey: ["admin-products"]});
+        refatch();
       } catch (error) {
         console.error("Error deleting product:", error);
         toast({
@@ -92,7 +123,8 @@ const AdminProducts = () => {
 
   const handleSuccess = () => {
     // Invalidate and refetch
-    queryClient.invalidateQueries({queryKey: ["admin-products"]});
+    // queryClient.invalidateQueries({queryKey: ["admin-products"]});
+    refatch();
   };
 
   return (

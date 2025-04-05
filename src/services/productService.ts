@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 
 export const getProducts = async (params: any = {}) => {
   try {
-    await connectToDatabase();
+    // await connectToDatabase();
     
     const { 
       page = 1, 
