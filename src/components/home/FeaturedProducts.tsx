@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {Link} from "react-router-dom";
 import ProductGrid from "../product/ProductGrid";
 import {Button} from "@/components/ui/button";
@@ -11,7 +11,8 @@ import {productAPI} from "@/services/api";
 
 const FeaturedProducts: React.FC = () => {
   const {toast} = useToast();
-  const featuredProducts = perfumes.slice(0, 6);
+  // const featuredProducts = perfumes.slice(0, 6);
+  const [featuredProducts, setFeaturedProducts] = React.useState<any[]>([]);
   // const {
   //   data: featuredProducts = [],
   //   isLoading,
@@ -30,12 +31,24 @@ const FeaturedProducts: React.FC = () => {
   //   staleTime: 300000, // 5 minutes
   //   retry: 2
   // });
-  productAPI
-    .getAll({limit: 6})
-    .then((res) => {})
-    .catch((err) => {
-      console.log(err);
-    });
+
+  useEffect(() => {
+    productAPI
+      .getAll({limit: 6, featured: true})
+      .then((res) => {
+        console.log("Featured products:", res.products);
+        setFeaturedProducts(res.products);
+      })
+      .catch((err) => {
+        console.error("Error fetching featured products:", err);
+        toast({
+          title: "Error loading products",
+          description:
+            "Failed to load featured products. Please try again later.",
+          variant: "destructive",
+        });
+      });
+  }, []);
 
   return (
     <section className="py-16 bg-secondary/30">

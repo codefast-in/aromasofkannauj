@@ -1,5 +1,5 @@
 import {STORAGE_KEYS, API_URL} from "@/config/constants";
-import { match } from "assert";
+import {match} from "assert";
 import axios from "axios";
 
 // Storage utils
@@ -114,6 +114,7 @@ export const productAPI = {
       minPrice?: number;
       maxPrice?: number;
       sort?: string;
+      featured?: boolean;
     } = {}
   ) => {
     try {
@@ -134,17 +135,16 @@ export const productAPI = {
   },
 
   create: async (productData: any) => {
-    console.log(productData)
+    console.log(productData);
     try {
       const response = await api.post("/product/create", productData);
       return response.data;
     } catch (error) {
       throw error;
     }
-  }, 
+  },
 
   update: async (id: string, productData: any) => {
-  
     try {
       const response = await api.put(`/product/update/${id}`, productData);
       return response.data;
@@ -273,6 +273,6 @@ export const coponAPI = {
     } catch (error) {
       throw error;
     }
-  }
+  },
 };
 export default api;

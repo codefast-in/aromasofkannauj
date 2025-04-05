@@ -1,60 +1,70 @@
-
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { 
+import React, {useState, useEffect} from "react";
+import {useParams, Link} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {
   ChevronRight,
-  ShoppingCart, 
-  Heart, 
-  Share2, 
-  Check, 
+  ShoppingCart,
+  Heart,
+  Share2,
+  Check,
   Star,
   Truck,
-  ShieldCheck
-} from 'lucide-react';
-import Layout from '@/components/layout/Layout';
-import { perfumes } from '@/services/mockData';
-import { addItem } from '@/store/slices/cartSlice';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import ProductGrid from '@/components/product/ProductGrid';
+  ShieldCheck,
+} from "lucide-react";
+import Layout from "@/components/layout/Layout";
+import {perfumes} from "@/services/mockData";
+import {addItem} from "@/store/slices/cartSlice";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {Button} from "@/components/ui/button";
+import {useToast} from "@/hooks/use-toast";
+import ProductGrid from "@/components/product/ProductGrid";
+import {productAPI} from "@/services/api";
 
 const ProductDetail = () => {
-  const { id } = useParams<{ id: string }>();
-  const product = perfumes.find(p => p.id === id);
+  const {id} = useParams<{id: string}>();
+  const [perfumes, setPerfume] = useState<any>(null);
+  const [product, setProduct] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
-  const { toast } = useToast();
-  
-  const [selectedSize, setSelectedSize] = useState('');
+  const {toast} = useToast();
+
+  const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState('');
-  
+  const [selectedImage, setSelectedImage] = useState("");
+
   // Get similar products (same category or notes)
   const similarProducts = product
     ? perfumes
-        .filter(p => p.id !== product.id && 
-          (p.category === product.category || 
-           p.notes.some(note => product.notes.includes(note))))
+        .filter(
+          (p) =>
+            p.id !== product.id &&
+            (p.category === product.category ||
+              p.notes.some((note) => product.notes.includes(note)))
+        )
         .slice(0, 4)
     : [];
 
   useEffect(() => {
     // Set default selected size and image
+    productAPI.getById(id).then((response) => {
+      setProduct(response.product);
+      setSelectedSize(response.product?.sizes[0]?.size);
+      setSelectedImage(response.product?.images[0]);
+      setIsLoading(false);
+    });
+    productAPI.getAll({}).then((response) => {
+      setPerfume(response.products);
+      setIsLoading(false);
+    });
     if (product) {
-      setSelectedSize(product.sizes[0].size);
-      setSelectedImage(product.images[0]);
-      
+      setSelectedSize(product?.sizes[0]?.size);
+      setSelectedImage(product?.images[0]);
+
       // Scroll to top when product changes
       window.scrollTo(0, 0);
     }
-  }, [product]);
-  
+  }, []);
+
   if (!product) {
     return (
       <Layout>
@@ -70,28 +80,30 @@ const ProductDetail = () => {
       </Layout>
     );
   }
-  
-  const selectedSizeInfo = product.sizes.find(s => s.size === selectedSize);
+
+  const selectedSizeInfo = product.sizes.find((s) => s.size === selectedSize);
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity >= 1 && newQuantity <= product.stock) {
       setQuantity(newQuantity);
     }
   };
-  
+
   const handleAddToCart = () => {
     if (!selectedSizeInfo) return;
-    
-    dispatch(addItem({
-      id: product.id,
-      name: product.name,
-      price: selectedSizeInfo.price,
-      quantity,
-      size: selectedSize,
-      image: product.images[0]
-    }));
-    
+
+    dispatch(
+      addItem({
+        id: product.id,
+        name: product.name,
+        price: selectedSizeInfo.price,
+        quantity,
+        size: selectedSize,
+        image: product.images[0],
+      })
+    );
+
     toast({
-      title: 'Added to cart',
+      title: "Added to cart",
       description: `${product.name} (${selectedSize}) has been added to your cart`,
     });
   };
@@ -111,7 +123,9 @@ const ProductDetail = () => {
               <ChevronRight size={14} className="text-muted-foreground" />
             </li>
             <li>
-              <Link to="/shop" className="text-muted-foreground hover:text-primary">
+              <Link
+                to="/shop"
+                className="text-muted-foreground hover:text-primary">
                 Shop
               </Link>
             </li>
@@ -119,10 +133,9 @@ const ProductDetail = () => {
               <ChevronRight size={14} className="text-muted-foreground" />
             </li>
             <li>
-              <Link 
-                to={`/shop?category=${product.category}`} 
-                className="text-muted-foreground hover:text-primary"
-              >
+              <Link
+                to={`/shop?category=${product.category}`}
+                className="text-muted-foreground hover:text-primary">
                 {product.category}
               </Link>
             </li>
@@ -134,18 +147,18 @@ const ProductDetail = () => {
             </li>
           </ol>
         </nav>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Product Images */}
           <div className="space-y-4">
             <div className="aspect-square rounded-lg overflow-hidden bg-white border">
-              <img 
-                src={selectedImage} 
-                alt={product.name} 
+              <img
+                src={selectedImage}
+                alt={product.name}
                 className="w-full h-full object-contain"
               />
             </div>
-            
+
             {product.images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto pb-2">
                 {product.images.map((image, index) => (
@@ -153,12 +166,13 @@ const ProductDetail = () => {
                     key={index}
                     onClick={() => setSelectedImage(image)}
                     className={`w-20 h-20 rounded-md overflow-hidden border-2 flex-shrink-0 ${
-                      selectedImage === image ? 'border-primary' : 'border-transparent'
-                    }`}
-                  >
-                    <img 
-                      src={image} 
-                      alt={`${product.name} ${index + 1}`} 
+                      selectedImage === image
+                        ? "border-primary"
+                        : "border-transparent"
+                    }`}>
+                    <img
+                      src={image}
+                      alt={`${product.name} ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
                   </button>
@@ -166,62 +180,65 @@ const ProductDetail = () => {
               </div>
             )}
           </div>
-          
+
           {/* Product Info */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-serif font-bold mb-2">{product.name}</h1>
-              
+              <h1 className="text-3xl font-serif font-bold mb-2">
+                {product.name}
+              </h1>
+
               <div className="flex items-center gap-4 mb-4">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
-                    <Star 
+                    <Star
                       key={i}
                       size={16}
-                      className={i < Math.floor(product.rating) ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}
+                      className={
+                        i < Math.floor(product.rating)
+                          ? "text-yellow-500 fill-yellow-500"
+                          : "text-gray-300"
+                      }
                     />
                   ))}
                   <span className="ml-2 text-sm">
                     {product.rating} ({product.reviewCount} reviews)
                   </span>
                 </div>
-                
+
                 <span className="text-sm px-2 py-0.5 bg-green-100 text-green-800 rounded">
                   In Stock
                 </span>
               </div>
-              
+
               <p className="text-2xl font-medium mb-4">
                 ₹{selectedSizeInfo?.price.toFixed(2)}
               </p>
-              
-              <p className="text-muted-foreground">
-                {product.description}
-              </p>
+
+              <p className="text-muted-foreground">{product.description}</p>
             </div>
-            
+
             <div className="space-y-4">
               {/* Product Type */}
               <div>
                 <h3 className="text-sm font-medium mb-1">Type</h3>
                 <p>{product.type}</p>
               </div>
-              
+
               {/* Notes */}
               <div>
                 <h3 className="text-sm font-medium mb-1">Notes</h3>
                 <div className="flex flex-wrap gap-2">
                   {product.notes.map((note) => (
-                    <span 
-                      key={note} 
-                      className="px-2 py-1 text-xs rounded-full bg-secondary text-secondary-foreground"
-                    >
+                    <span
+                      key={note}
+                      className="px-2 py-1 text-xs rounded-full bg-secondary text-secondary-foreground">
                       {note}
                     </span>
                   ))}
                 </div>
               </div>
-              
+
               {/* Size Selection */}
               <div>
                 <h3 className="text-sm font-medium mb-2">Size</h3>
@@ -232,16 +249,15 @@ const ProductDetail = () => {
                       onClick={() => setSelectedSize(size.size)}
                       className={`px-4 py-2 border rounded-md text-sm ${
                         selectedSize === size.size
-                          ? 'border-primary bg-primary text-white'
-                          : 'border-gray-300 hover:border-primary'
-                      }`}
-                    >
+                          ? "border-primary bg-primary text-white"
+                          : "border-gray-300 hover:border-primary"
+                      }`}>
                       {size.size} - ₹{size.price.toFixed(2)}
                     </button>
                   ))}
                 </div>
               </div>
-              
+
               {/* Quantity */}
               <div>
                 <h3 className="text-sm font-medium mb-2">Quantity</h3>
@@ -249,8 +265,7 @@ const ProductDetail = () => {
                   <button
                     onClick={() => handleQuantityChange(quantity - 1)}
                     className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-l-md"
-                    disabled={quantity <= 1}
-                  >
+                    disabled={quantity <= 1}>
                     -
                   </button>
                   <div className="w-12 h-8 flex items-center justify-center border-t border-b border-gray-300">
@@ -259,33 +274,29 @@ const ProductDetail = () => {
                   <button
                     onClick={() => handleQuantityChange(quantity + 1)}
                     className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-r-md"
-                    disabled={quantity >= product.stock}
-                  >
+                    disabled={quantity >= product.stock}>
                     +
                   </button>
                 </div>
               </div>
             </div>
-            
+
             {/* Actions */}
             <div className="flex flex-wrap gap-4">
-              <Button 
-                className="flex-1 gap-2" 
-                onClick={handleAddToCart}
-              >
+              <Button className="flex-1 gap-2" onClick={handleAddToCart}>
                 <ShoppingCart size={18} />
                 Add to Cart
               </Button>
-              
+
               <Button variant="outline" size="icon">
                 <Heart size={18} />
               </Button>
-              
+
               <Button variant="outline" size="icon">
                 <Share2 size={18} />
               </Button>
             </div>
-            
+
             {/* Features */}
             <div className="pt-6 border-t space-y-3">
               <div className="flex items-center gap-2">
@@ -294,7 +305,9 @@ const ProductDetail = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Truck size={18} className="text-primary" />
-                <span className="text-sm">Free Shipping on orders above ₹1000</span>
+                <span className="text-sm">
+                  Free Shipping on orders above ₹1000
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck size={18} className="text-primary" />
@@ -303,7 +316,7 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Tabs Section */}
         <div className="mt-12">
           <Tabs defaultValue="description">
@@ -312,23 +325,29 @@ const ProductDetail = () => {
               <TabsTrigger value="details">Details</TabsTrigger>
               <TabsTrigger value="reviews">Reviews</TabsTrigger>
             </TabsList>
-            
-            <TabsContent value="description" className="mt-6 bg-white p-6 rounded-lg shadow-sm">
+
+            <TabsContent
+              value="description"
+              className="mt-6 bg-white p-6 rounded-lg shadow-sm">
               <h3 className="text-lg font-medium mb-4">About {product.name}</h3>
-              <p className="text-muted-foreground">
-                {product.description}
-              </p>
+              <p className="text-muted-foreground">{product.description}</p>
               <p className="mt-4 text-muted-foreground">
-                Experience the essence of luxury with {product.name}. Crafted with the finest ingredients, this {product.type.toLowerCase()} 
-                captivates the senses with its unique blend of {product.notes.join(', ')} notes. Perfect for {
-                  product.category === 'Men' ? 'the modern gentleman' : 
-                  product.category === 'Women' ? 'the contemporary woman' : 
-                  'anyone seeking a distinctive fragrance'
-                }, it leaves a lasting impression wherever you go.
+                Experience the essence of luxury with {product.name}. Crafted
+                with the finest ingredients, this {product.type.toLowerCase()}
+                captivates the senses with its unique blend of{" "}
+                {product.notes.join(", ")} notes. Perfect for{" "}
+                {product.category === "Men"
+                  ? "the modern gentleman"
+                  : product.category === "Women"
+                  ? "the contemporary woman"
+                  : "anyone seeking a distinctive fragrance"}
+                , it leaves a lasting impression wherever you go.
               </p>
             </TabsContent>
-            
-            <TabsContent value="details" className="mt-6 bg-white p-6 rounded-lg shadow-sm">
+
+            <TabsContent
+              value="details"
+              className="mt-6 bg-white p-6 rounded-lg shadow-sm">
               <h3 className="text-lg font-medium mb-4">Product Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -336,8 +355,11 @@ const ProductDetail = () => {
                   <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                     <li>Category: {product.category}</li>
                     <li>Type: {product.type}</li>
-                    <li>Notes: {product.notes.join(', ')}</li>
-                    <li>Available sizes: {product.sizes.map(s => s.size).join(', ')}</li>
+                    <li>Notes: {product.notes.join(", ")}</li>
+                    <li>
+                      Available sizes:{" "}
+                      {product.sizes.map((s) => s.size).join(", ")}
+                    </li>
                     <li>Long-lasting fragrance</li>
                     <li>Made with premium ingredients</li>
                   </ul>
@@ -345,31 +367,42 @@ const ProductDetail = () => {
                 <div>
                   <h4 className="font-medium mb-2">Usage</h4>
                   <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                    <li>Apply to pulse points such as wrists, neck, and behind ears</li>
+                    <li>
+                      Apply to pulse points such as wrists, neck, and behind
+                      ears
+                    </li>
                     <li>Ideal for daily use or special occasions</li>
-                    <li>Store in a cool, dry place away from direct sunlight</li>
+                    <li>
+                      Store in a cool, dry place away from direct sunlight
+                    </li>
                     <li>Keep the bottle tightly closed when not in use</li>
                   </ul>
                 </div>
               </div>
             </TabsContent>
-            
-            <TabsContent value="reviews" className="mt-6 bg-white p-6 rounded-lg shadow-sm">
+
+            <TabsContent
+              value="reviews"
+              className="mt-6 bg-white p-6 rounded-lg shadow-sm">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-medium">Customer Reviews</h3>
                 <Button>Write a Review</Button>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="text-center">
                     <div className="text-3xl font-bold">{product.rating}</div>
                     <div className="flex">
                       {[...Array(5)].map((_, i) => (
-                        <Star 
+                        <Star
                           key={i}
                           size={16}
-                          className={i < Math.floor(product.rating) ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}
+                          className={
+                            i < Math.floor(product.rating)
+                              ? "text-yellow-500 fill-yellow-500"
+                              : "text-gray-300"
+                          }
                         />
                       ))}
                     </div>
@@ -377,7 +410,7 @@ const ProductDetail = () => {
                       {product.reviewCount} reviews
                     </div>
                   </div>
-                  
+
                   <div className="flex-1">
                     {/* This would be a real review distribution chart in a real app */}
                     <div className="space-y-1">
@@ -385,19 +418,18 @@ const ProductDetail = () => {
                         <div key={rating} className="flex items-center gap-2">
                           <div className="text-sm w-2">{rating}</div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                              className="bg-yellow-500 h-2 rounded-full" 
-                              style={{ 
-                                width: `${Math.random() * 100}%` 
-                              }}
-                            ></div>
+                            <div
+                              className="bg-yellow-500 h-2 rounded-full"
+                              style={{
+                                width: `${Math.random() * 100}%`,
+                              }}></div>
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Sample reviews */}
                 <div className="border-t pt-4">
                   <div className="flex justify-between mb-2">
@@ -405,10 +437,14 @@ const ProductDetail = () => {
                       <h4 className="font-medium">Exquisite Fragrance</h4>
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (
-                          <Star 
+                          <Star
                             key={i}
                             size={14}
-                            className={i < 5 ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}
+                            className={
+                              i < 5
+                                ? "text-yellow-500 fill-yellow-500"
+                                : "text-gray-300"
+                            }
                           />
                         ))}
                       </div>
@@ -421,21 +457,26 @@ const ProductDetail = () => {
                     By Priya S.
                   </p>
                   <p className="text-sm">
-                    This perfume is absolutely divine! The scent is sophisticated and long-lasting. 
-                    I receive compliments every time I wear it. Definitely worth the investment.
+                    This perfume is absolutely divine! The scent is
+                    sophisticated and long-lasting. I receive compliments every
+                    time I wear it. Definitely worth the investment.
                   </p>
                 </div>
-                
+
                 <div className="border-t pt-4">
                   <div className="flex justify-between mb-2">
                     <div>
                       <h4 className="font-medium">Amazing Longevity</h4>
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (
-                          <Star 
+                          <Star
                             key={i}
                             size={14}
-                            className={i < 4 ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}
+                            className={
+                              i < 4
+                                ? "text-yellow-500 fill-yellow-500"
+                                : "text-gray-300"
+                            }
                           />
                         ))}
                       </div>
@@ -448,19 +489,22 @@ const ProductDetail = () => {
                     By Arjun M.
                   </p>
                   <p className="text-sm">
-                    The scent lasts all day, which is rare for many perfumes I've tried. 
-                    The packaging is elegant too. Would definitely recommend.
+                    The scent lasts all day, which is rare for many perfumes
+                    I've tried. The packaging is elegant too. Would definitely
+                    recommend.
                   </p>
                 </div>
               </div>
             </TabsContent>
           </Tabs>
         </div>
-        
+
         {/* Similar Products */}
         {similarProducts.length > 0 && (
           <div className="mt-16">
-            <h2 className="text-2xl font-serif font-bold mb-6">You May Also Like</h2>
+            <h2 className="text-2xl font-serif font-bold mb-6">
+              You May Also Like
+            </h2>
             <ProductGrid products={similarProducts} columns={4} />
           </div>
         )}

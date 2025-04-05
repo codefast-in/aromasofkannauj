@@ -90,8 +90,8 @@ const Shop = () => {
         setProducts(prev => [...prev, ...result.products]);
       }
       
-      setCurrentPage(result.pagination.currentPage);
-      setTotalPages(result.pagination.totalPages);
+      // setCurrentPage(result.pagination.currentPage);
+      // setTotalPages(result.pagination.totalPages);
       
     } catch (error) {
       console.error('Error fetching products:', error);
