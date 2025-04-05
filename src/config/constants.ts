@@ -1,7 +1,7 @@
-export const API_URL =
-  // import.meta.env.DEV ?
-  "http://localhost:8000/api/v1/";
-//  :  '/api';
+export const API_URL =  import.meta.env.VITE_API_URL ;
+//   // import.meta.env.DEV ?
+//   "http://localhost:8000/api/v1/";
+// //  :  '/api';
 
 export const MONGODB_URL =
   "mongodb+srv://infoinextets:VWi8V6YTnxIgESpW@cluster0.3doac7y.mongodb.net/Perfume";
