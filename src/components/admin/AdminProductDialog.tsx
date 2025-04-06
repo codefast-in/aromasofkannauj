@@ -26,7 +26,8 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {Loader2, Upload, X} from "lucide-react";
 import {createProduct, updateProduct} from "@/services/productService";
 import {useToast} from "@/hooks/use-toast";
-import {productAPI} from "@/services/api";
+import api, {productAPI} from "@/services/api";
+import axios from "axios";
 
 interface AdminProductDialogProps {
   open: boolean;
@@ -56,7 +57,7 @@ const AdminProductDialog: React.FC<AdminProductDialogProps> = ({
     keepExistingImages: true,
   });
 
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -121,23 +122,40 @@ const AdminProductDialog: React.FC<AdminProductDialogProps> = ({
     setFormData((prev) => ({...prev, featured: checked}));
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
+const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const files = e.target.files;
+  if (!files || files.length === 0) return;
 
-    setUploading(true);
+  setUploading(true);
+  const formData = new FormData();
+  for (let i = 0; i < files.length; i++) {
+    formData.append("thumbnail", files[i]); // "images" should match your backend field name
+  }
 
-    // Create temporary preview URLs for the UI
-    const newImagePreviews = Array.from(files).map((file) =>
-      URL.createObjectURL(file)
-    );
-    setImages((prev) => [...prev, ...newImagePreviews]);
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}image/multi`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log(response.data);
 
-    // Store the actual files for later upload
+    const formattedImages = response.data.images.map((img: any) => ({
+      public_id: img.public_id,
+      url: img.secure_url,
+    }));
+    setImages((prev) => [...prev, ...formattedImages]);
+
+    // Optional: If you want to keep the files too
     setImageFiles((prev) => [...prev, ...Array.from(files)]);
-
+  } catch (error) {
+    console.error("Upload failed:", error);
+  } finally {
     setUploading(false);
-  };
+  }
+};
+
+  
 
   const removeImage = (index: number) => {
     // If removing a preview image from newly added files
@@ -170,7 +188,7 @@ const AdminProductDialog: React.FC<AdminProductDialogProps> = ({
         // Update existing product
         const updatedProduct = {
           ...formData,
-          images: formData.keepExistingImages ? images : imageFiles,
+          images: formData.keepExistingImages ? images : images,
         };
 
         //   if (key === "images") {
@@ -199,7 +217,7 @@ const AdminProductDialog: React.FC<AdminProductDialogProps> = ({
         });
       } else {
         // Create new product
-        await productAPI.create({...formData, images: imageFiles});
+        await productAPI.create({...formData, images: images});
         // createProduct(formData, imageFiles);
         toast({
           title: "Success",
@@ -367,7 +385,7 @@ const AdminProductDialog: React.FC<AdminProductDialogProps> = ({
                   key={index}
                   className="relative aspect-square rounded-md overflow-hidden border">
                   <img
-                    src={image}
+                    src={image?.url}
                     alt={`Product image ${index + 1}`}
                     className="w-full h-full object-cover"
                   />

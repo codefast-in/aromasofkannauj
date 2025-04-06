@@ -4,12 +4,17 @@ import { useInView } from 'react-intersection-observer';
 import ProductCard from './ProductCard';
 import { Loader2 } from 'lucide-react';
 
+
+interface Image {
+  public_id: string;
+  url: string;
+}
 interface Product {
   _id?: string;
   id?: string;
   name: string;
   price: number;
-  images: string[];
+  images: Image[]; // array of Image objects
   category: string;
   rating: number;
   featured?: boolean;
@@ -90,7 +95,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
               id={productId}
               name={product.name}
               price={product.price}
-              image={product.images?.[0] || '/placeholder.svg'}
+              image={product.images?.[0]?.url || '/placeholder.svg'}
               category={product.category}
               rating={product.rating}
               featured={product.featured}

@@ -38,7 +38,7 @@ export const isAdmin = (): boolean => {
 };
 
 // Axios instance
-const api = axios.create({
+export const api = axios.create({
   baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
@@ -101,6 +101,9 @@ export const authAPI = {
   },
 };
 
+
+
+
 // Enhanced product API with pagination and filtering
 export const productAPI = {
   getAll: async (
@@ -136,6 +139,7 @@ export const productAPI = {
 
   create: async (productData: any) => {
     console.log(productData);
+    
     try {
       const response = await api.post("/product/create", productData);
       return response.data;

@@ -4,6 +4,7 @@ const fs = require('fs');
 
 exports.uploadImages = async (req, res) => {
   try {
+    console.log("object")
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).json({ success: false, message: 'No files were uploaded.' });
     }

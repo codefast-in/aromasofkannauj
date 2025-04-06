@@ -1,53 +1,54 @@
-const express = require("express")
+const express = require("express");
 const app = express();
-const cookieParser = require("cookie-parser")
-const cors = require("cors")
-const { cloudinaryConnect } = require("./config/cloudinary")
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const { cloudinaryConnect } = require("./config/cloudinary");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const bodyParser = require("body-parser");
-
-
 
 dotenv.config();
 
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT || 8000;
 connectDB();
 
+// Use body parser with larger limits
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-
-app.use(express.json())
+// Cookie parser
 app.use(cookieParser());
-app.use(bodyParser.json())
+
+// CORS
 app.use(cors({
     origin: "*",
     credentials: true,
-}))
+}));
 
-app.use(
-    fileUpload({
-        useTempFiles: true,
-        tempFileDir: "/tmp"
-    })
-)
+// File upload middleware
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp"
+}));
 
+// Cloudinary config
 cloudinaryConnect();
 
-app.use("/api/v1/image", require("./routes/imageRoute"))
-app.use("/api/v1/auth", require("./routes/userRoute"))
-app.use("/api/v1/product", require("./routes/productRoute")) 
-app.use("/api/v1/coupon", require("./routes/couponCtrl"))
+// Routes
+app.use("/api/v1/image", require("./routes/imageRoute"));
+app.use("/api/v1/auth", require("./routes/userRoute"));
+app.use("/api/v1/product", require("./routes/productRoute"));
+app.use("/api/v1/coupon", require("./routes/couponCtrl"));
 
-
-
+// Root route
 app.get("/", (req, res) => {
     return res.json({
         success: true,
         message: "Your server is up and running ..."
-    })
-})
+    });
+});
 
+// Start server
 app.listen(PORT, () => {
-    console.log(`Server is running at port no ${PORT}`)
-})
+    console.log(`Server is running at port no ${PORT}`);
+});

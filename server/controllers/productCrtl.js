@@ -16,6 +16,7 @@ exports.createProduct = async (req, res) => {
       featured,
     } = req.body;
 
+    console.log(images)
     const product = new Product({
       name,
       description,
