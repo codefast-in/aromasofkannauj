@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import {
   Table,
@@ -8,29 +8,55 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {users, orders} from "@/services/mockData";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Search, Mail, ShoppingBag} from "lucide-react";
-import {Avatar, AvatarFallback} from "@/components/ui/avatar";
-import {userAPI} from "@/services/api";
-
+import { users, orders } from "@/services/mockData";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search, Mail, ShoppingBag } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { getToken, userAPI } from "@/services/api";
+import { getAllUsers } from "@/services/order"
 const AdminCustomers = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState<any>([]);
-  userAPI
-    .getAll()
-    .then((res) => {
-      setUsers(res.data.users);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  const token = getToken(); // Ensure you have a function to retrieve the token
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!token) return;
+
+      try {
+        const fetchAllOrders = getAllUsers();
+        const response = await fetchAllOrders(token);
+
+        const transformedUsers = response.map((user: any) => ({
+          id: user?._id,
+          name: user?.name || "No Name",
+          email: user?.email || "No Email",
+          role: user?.role || "customer",
+          createdAt: user?.createdAt || new Date().toISOString(),
+        }));
+
+        setUsers(transformedUsers);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
+  // Watch changes in users
+  useEffect(() => {
+    console.log("Users after transformation:", users);
+  }, [users]);
+
+
   // Filter customers only (not admins)
-  const customers = users.filter((user: any) => user.role === "customer");
+  const customers = users
 
   // Further filter based on search
-  const filteredCustomers = customers.filter((customer:any) => {
+  const filteredCustomers = customers.filter((customer: any) => {
     return (
       customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -89,9 +115,9 @@ const AdminCustomers = () => {
               <TableRow>
                 <TableHead>Customer</TableHead>
                 <TableHead>Joined</TableHead>
-                <TableHead>Orders</TableHead>
-                <TableHead>Total Spent</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                {/* <TableHead>Orders</TableHead> */}
+                {/* <TableHead>Total Spent</TableHead> */}
+                {/* <TableHead className="text-right">Actions</TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -119,9 +145,9 @@ const AdminCustomers = () => {
                       </div>
                     </TableCell>
                     <TableCell>{formatDate(joinedDate)}</TableCell>
-                    <TableCell>{orderCount}</TableCell>
-                    <TableCell>₹{totalSpent.toFixed(2)}</TableCell>
-                    <TableCell className="text-right">
+                    {/* <TableCell>{orderCount}</TableCell> */}
+                    {/* <TableCell>₹{totalSpent.toFixed(2)}</TableCell> */}
+                    {/* <TableCell className="text-right">
                       <div className="flex justify-end space-x-2">
                         <Button variant="ghost" size="sm">
                           <Mail size={16} className="mr-1" />
@@ -132,7 +158,7 @@ const AdminCustomers = () => {
                           Orders
                         </Button>
                       </div>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 );
               })}

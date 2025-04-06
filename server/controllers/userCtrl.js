@@ -122,9 +122,35 @@ const loginMemberCtrl = async (req, res) => {
         });
     }
 };
+const getAllUsersCtrl = async (req, res) => {
+    try {
+      // Admin check
+      if (req.user.role !== "admin") {
+        return res.status(403).json({
+          success: false,
+          message: "Access denied. Admins only.",
+        });
+      }
+  
+      // Get all users
+      const users = await userModel.find().select("-password"); // Hide password
+  
+      return res.status(200).json({
+        success: true,
+        users,
+        message: "Users fetched successfully",
+      });
+    } catch (error) {
+      console.error("FETCH USERS ERROR:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to fetch users",
+      });
+    }
+  };
+  
 
 
 
 
-
-module.exports = { registerMemberCtrl, loginMemberCtrl };
+module.exports = { registerMemberCtrl, loginMemberCtrl ,getAllUsersCtrl};

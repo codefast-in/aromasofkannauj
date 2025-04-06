@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import {
   Table,
@@ -25,7 +25,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {orderAPI, userAPI} from "@/services/api";
+import {getToken, orderAPI, userAPI} from "@/services/api";
+import {getAllOrder} from "@/services/order"
+
 
 const AdminOrders = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,33 +36,66 @@ const AdminOrders = () => {
   const [safeOrders, setSafeOrders] = useState<any>([]);
   const [safeUsers, setSafeUsers] = useState<any>([]);
   // Add safety checks
-  orderAPI
-    .getAll({})
-    .then((res) => {
-      // console.log(res);
-      setSafeOrders(res.orders || []);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  userAPI
-    .getAll({})
-    .then((res) => {
-      // console.log(res);
-      setSafeUsers(res.users || []);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+        const token = getToken(); // Ensure you have a function to retrieve the token
+
+console.log(token)
+useEffect(() => {
+  const fetchData = async () => {
+    if (!token) return;
+
+    try {
+      const fetchAllOrders = getAllOrder();
+      const response = await fetchAllOrders(token); // assuming response is an array
+
+      const transformedOrders = response.map((order: any) => {
+        return {
+          id: order.order_id,
+          userDetilas: order.user,
+          createdAt: order.createdAt,
+          totalAmount: parseFloat(order.totalPrice),
+          status: order.orderStatus,
+          shippingAddress: order.shippingInfo
+          ? ` ${order.shippingInfo.address}, ${order.shippingInfo.city}, ${order.shippingInfo.state} - ${order.shippingInfo.pincode}`
+          : '',
+        
+          products: order.orderItems.map((item: any) => ({
+            name: item.product?.name || "Unnamed Product",
+            price: item.product?.price || 0,
+            quantity: item.quantity || 1,
+          })),
+        };
+      });
+
+      setSafeOrders(transformedOrders);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
+
+  fetchData();
+}, [token]);
+
 
   // Filter orders based on search and status
-  const filteredOrders = safeOrders.filter((order:any) => {
-    const matchesSearch =
-      order?.id?.toLowerCase().includes(searchTerm.toLowerCase()) || false;
-    const matchesStatus = !statusFilter || order?.status === statusFilter;
-
+  const filteredOrders = safeOrders.filter((order: any) => {
+    const search = searchTerm.toLowerCase();
+  
+    const matchesOrderId = order?.id?.toLowerCase().includes(search);
+    const matchesCustomer = order?.userDetilas?.name
+      ?.toLowerCase()
+      .includes(search);
+    const matchesEmail = order?.userDetilas?.email
+      ?.toLowerCase()
+      .includes(search);
+  
+    const matchesSearch = matchesOrderId || matchesCustomer || matchesEmail;
+  
+    const matchesStatus =
+      !statusFilter || statusFilter === "all" || order?.status === statusFilter;
+  
     return matchesSearch && matchesStatus;
   });
+  
 
   const viewOrderDetails = (order: any) => {
     setSelectedOrder(order);
@@ -133,7 +168,7 @@ const AdminOrders = () => {
               {filteredOrders.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="font-medium">{order.id}</TableCell>
-                  <TableCell>{getCustomerName(order.userId)}</TableCell>
+                  <TableCell>{order?.userDetilas?.name}</TableCell>
                   <TableCell>{formatDate(order.createdAt)}</TableCell>
                   <TableCell>₹{order.totalAmount.toFixed(2)}</TableCell>
                   <TableCell>
@@ -191,12 +226,12 @@ const AdminOrders = () => {
                   <div className="bg-gray-50 p-4 rounded-md">
                     <p>
                       <strong>Name:</strong>{" "}
-                      {getCustomerName(selectedOrder.userId)}
+                      {selectedOrder?.userDetilas?.name}
                     </p>
                     <p>
                       <strong>Email:</strong>{" "}
-                      {users.find((u) => u.id === selectedOrder.userId)
-                        ?.email || "N/A"}
+                      {selectedOrder?.userDetilas?.email}
+
                     </p>
                     <p>
                       <strong>Order Date:</strong>{" "}
@@ -209,9 +244,10 @@ const AdminOrders = () => {
                   <h3 className="font-medium mb-2">Shipping Address</h3>
                   <div className="bg-gray-50 p-4 rounded-md">
                     <p>
-                      {selectedOrder.shippingAddress ||
+                      {selectedOrder.shippingAddress  ||
                         "123 Main Street, Apartment 4B, New Delhi - 110001"}
                     </p>
+                 
                   </div>
                 </div>
               </div>

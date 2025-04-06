@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -24,6 +23,8 @@ import NotFound from "./pages/NotFound";
 import About from "./components/home/About";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import Checkout from "./pages/Checkout";
+import UserOrders from "./pages/Order";
 
 const queryClient = new QueryClient();
 
@@ -37,7 +38,7 @@ const App = () => (
             <Route path="/shop" element={<Shop />} />
             <Route path="/about" element={<AboutPage/>} />
             <Route path="/product/:id" element={<ProductDetail />} />
-            
+            <Route path="/checkout" element={<Checkout />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/products" element={<AdminProducts />} />
             <Route path="/admin/orders" element={<AdminOrders />} />
+            <Route path="/orders" element={<UserOrders />} />
             <Route path="/admin/customers" element={<AdminCustomers />} />
             <Route path="/admin/categories" element={<AdminCategories />} />
             <Route path="/admin/settings" element={<AdminSettings />} />

@@ -42,6 +42,7 @@ export const api = axios.create({
   baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
+    
   },
 });
 
@@ -121,6 +122,7 @@ export const productAPI = {
     } = {}
   ) => {
     try {
+  
       const response = await api.get("product/getAll", {params});
       return response.data;
     } catch (error) {
@@ -168,9 +170,17 @@ export const productAPI = {
 };
 
 export const orderAPI = {
-  getAll: async (filters = {}) => {
+  getAll: async (filters = {},token:string) => {
     try {
-      const response = await api.get("/orders", {params: filters});
+      console.log(token)
+
+      if(!token) return
+      const response = await api.get("order/get", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: filters,
+      });
       return response.data;
     } catch (error) {
       throw error;

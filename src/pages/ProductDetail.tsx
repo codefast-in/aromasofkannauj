@@ -37,7 +37,7 @@ const ProductDetail = () => {
     ? perfumes
         .filter(
           (p) =>
-            p.id !== product.id &&
+            p._id !== product._id &&
             (p.category === product.category ||
               p.notes.some((note) => product.notes.includes(note)))
         )
@@ -49,7 +49,7 @@ const ProductDetail = () => {
     productAPI.getById(id).then((response) => {
       setProduct(response.product);
       setSelectedSize(response.product?.sizes[0]?.size);
-      setSelectedImage(response.product?.images[0]);
+      setSelectedImage(response.product?.images[0]?.url);
       setIsLoading(false);
     });
     productAPI.getAll({}).then((response) => {
@@ -58,12 +58,12 @@ const ProductDetail = () => {
     });
     if (product) {
       setSelectedSize(product?.sizes[0]?.size);
-      setSelectedImage(product?.images[0]);
+      setSelectedImage(product?.images[0]?.url);
 
       // Scroll to top when product changes
       window.scrollTo(0, 0);
     }
-  }, []);
+  }, [id]);
 
   if (!product) {
     return (
@@ -164,14 +164,14 @@ const ProductDetail = () => {
                 {product.images.map((image, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedImage(image)}
+                    onClick={() => setSelectedImage(image?.url)}
                     className={`w-20 h-20 rounded-md overflow-hidden border-2 flex-shrink-0 ${
                       selectedImage === image
                         ? "border-primary"
                         : "border-transparent"
                     }`}>
                     <img
-                      src={image}
+                      src={image?.url}
                       alt={`${product.name} ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
@@ -187,7 +187,7 @@ const ProductDetail = () => {
               <h1 className="text-3xl font-serif font-bold mb-2">
                 {product.name}
               </h1>
-
+{/* 
               <div className="flex items-center gap-4 mb-4">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
@@ -209,7 +209,7 @@ const ProductDetail = () => {
                 <span className="text-sm px-2 py-0.5 bg-green-100 text-green-800 rounded">
                   In Stock
                 </span>
-              </div>
+              </div> */}
 
               <p className="text-2xl font-medium mb-4">
                 ₹{selectedSizeInfo?.price.toFixed(2)}
@@ -241,7 +241,7 @@ const ProductDetail = () => {
 
               {/* Size Selection */}
               <div>
-                <h3 className="text-sm font-medium mb-2">Size</h3>
+                {/* <h3 className="text-sm font-medium mb-2">Size</h3> */}
                 <div className="flex flex-wrap gap-2">
                   {product.sizes.map((size) => (
                     <button
@@ -323,7 +323,7 @@ const ProductDetail = () => {
             <TabsList className="w-full max-w-md mx-auto grid grid-cols-3">
               <TabsTrigger value="description">Description</TabsTrigger>
               <TabsTrigger value="details">Details</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
+              {/* <TabsTrigger value="reviews">Reviews</TabsTrigger> */}
             </TabsList>
 
             <TabsContent
