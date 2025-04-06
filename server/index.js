@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 // CORS
 app.use(cors({
-    origin: "*",
+    origin: ["https://aromasofkannauj.com , https://www.aromasofkannauj.com/"],
     credentials: true,
 }));
 
