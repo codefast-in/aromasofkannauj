@@ -32,17 +32,19 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState("");
 
-  // Get similar products (same category or notes)
-  const similarProducts = product
+
+  const similarProducts =
+  product && Array.isArray(perfumes)
     ? perfumes
         .filter(
           (p) =>
-            p._id !== product._id &&
+            p?._id !== product?._id &&
             (p.category === product.category ||
-              p.notes.some((note) => product.notes.includes(note)))
+              p.notes?.some((note) => product.notes?.includes(note)))
         )
         .slice(0, 4)
     : [];
+
 
   useEffect(() => {
     // Set default selected size and image
@@ -89,16 +91,16 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = () => {
-    if (!selectedSizeInfo) return;
-
+  
+console.log(product)
     dispatch(
       addItem({
-        id: product.id,
+        id: product._id,
         name: product.name,
-        price: selectedSizeInfo.price,
+        price: product.price,
         quantity,
-        size: selectedSize,
-        image: product.images[0],
+        size: '50ml',
+        image: product.images[0]?.url,
       })
     );
 
@@ -212,7 +214,7 @@ const ProductDetail = () => {
               </div> */}
 
               <p className="text-2xl font-medium mb-4">
-                ₹{selectedSizeInfo?.price.toFixed(2)}
+                ₹{product?.price.toFixed(2)}
               </p>
 
               <p className="text-muted-foreground">{product.description}</p>
