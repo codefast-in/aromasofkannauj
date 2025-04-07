@@ -82,7 +82,7 @@ const Checkout = () => {
       state: '',
       postalCode: '',
       country: 'India',
-      paymentMethod: 'cash_on_delivery',
+      paymentMethod: 'paypal',
     },
   });
 
@@ -498,8 +498,8 @@ const Checkout = () => {
                               defaultValue={field.value}
                               className="space-y-3"
                             >
-                              <div className="flex items-center space-x-2 rounded-md border p-4">
-                                <RadioGroupItem value="credit_card" id="credit_card" />
+                              {/* <div className="flex items-center space-x-2 rounded-md border p-4">
+                                <RadioGroupItem value="credit_card" id="credit_card" dis />
                                 <FormLabel htmlFor="credit_card" className="flex-1 cursor-pointer">
                                   <div className="flex items-center">
                                     <CreditCard className="mr-2 h-5 w-5" />
@@ -509,7 +509,7 @@ const Checkout = () => {
                                     Pay securely with your card
                                   </p>
                                 </FormLabel>
-                              </div>
+                              </div> */}
                               
                               <div className="flex items-center space-x-2 rounded-md border p-4">
                                 <RadioGroupItem value="paypal" id="paypal" />
@@ -518,23 +518,23 @@ const Checkout = () => {
                                     <svg viewBox="0 0 24 24" className="mr-2 h-5 w-5 text-blue-600" fill="currentColor">
                                       <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 4.586-5.611 4.586H11.44c-.524 0-.965.382-1.048.9l-.346 2.203 2.18.004c.242-.002.484.011.724.043 2.158.287 3.596-.236 4.292-1.607.335-.656.683-1.784.683-1.784l.726-3.892s.156-.795-.429-1.166z"/>
                                     </svg>
-                                    <span>PayPal</span>
+                                    <span>Razorpay</span>
                                   </div>
                                   <p className="text-sm text-muted-foreground mt-1">
-                                    Pay with your PayPal account
+                                    Pay with your Razorpay 
                                   </p>
                                 </FormLabel>
                               </div>
                               
                               <div className="flex items-center space-x-2 rounded-md border p-4">
-                                <RadioGroupItem value="cash_on_delivery" id="cash_on_delivery" />
+                                <RadioGroupItem value="cash_on_delivery" id="cash_on_delivery" disabled />
                                 <FormLabel htmlFor="cash_on_delivery" className="flex-1 cursor-pointer">
                                   <div className="flex items-center">
                                     <Truck className="mr-2 h-5 w-5" />
                                     <span>Cash on Delivery</span>
                                   </div>
                                   <p className="text-sm text-muted-foreground mt-1">
-                                    Pay when you receive your order
+                                   Currently Unavailable
                                   </p>
                                 </FormLabel>
                               </div>
