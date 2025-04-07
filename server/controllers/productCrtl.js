@@ -40,12 +40,79 @@ exports.createProduct = async (req, res) => {
 // Get All Products
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
-    res.status(200).json({success: true, products});
+    const {
+      search,
+      category,
+      notes,
+      types,
+      minPrice,
+      maxPrice,
+      sort,
+      page = 1,
+      limit = 12,
+    } = req.query;
+console.log(req.query)
+    const query = {};
+
+    // Search by name or description
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    // Filter by category
+    if (category) {
+      query.category = category;
+    }
+
+    // Filter by notes (comma-separated)
+    if (notes) {
+      query.notes = { $all: notes.split(',') };
+    }
+
+    // Filter by type (comma-separated)
+    if (types) {
+      query.type = { $in: types.split(',') };
+    }
+
+    // Price range
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) query.price.$gte = Number(minPrice);
+      if (maxPrice) query.price.$lte = Number(maxPrice);
+    }
+
+    // Pagination
+    const skip = (page - 1) * limit;
+
+    // Sorting
+    let sortBy = {};
+    if (sort === "price_asc") sortBy.price = 1;
+    else if (sort === "price_desc") sortBy.price = -1;
+    else if (sort === "newest") sortBy.createdAt = -1;
+
+    const products = await Product.find(query)
+      .sort(sortBy)
+      .skip(skip)
+      .limit(Number(limit));
+
+    const total = await Product.countDocuments(query);
+
+    res.status(200).json({
+      success: true,
+      products,
+      total,
+      page: Number(page),
+      totalPages: Math.ceil(total / limit),
+    });
+
   } catch (error) {
-    res.status(500).json({success: false, message: error.message});
+    res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 // Get Single Product
 exports.getProductById = async (req, res) => {

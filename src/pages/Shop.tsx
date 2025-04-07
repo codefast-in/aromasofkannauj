@@ -21,6 +21,7 @@ import { GENDER_CATEGORIES, PERFUME_NOTES, PERFUME_TYPES } from '@/config/consta
 import { getProducts } from '@/services/productService';
 import { useToast } from '@/hooks/use-toast';
 import { productAPI } from '@/services/api';
+import { useLocation } from 'react-router-dom';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -29,7 +30,7 @@ const Shop = () => {
   const [category, setCategory] = useState('all');
   const [selectedNotes, setSelectedNotes] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 300]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000000]);
   const [sortOption, setSortOption] = useState('createdAt_desc');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -64,7 +65,18 @@ const Shop = () => {
       setIsLoading(false);
     }
   };
-  
+  const location = useLocation();
+ 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const categoryFromURL = searchParams.get('category');
+
+    if (categoryFromURL) {
+      setCategory(categoryFromURL);
+    } else {
+      setCategory('all');
+    }
+  }, [location.search]);
   const fetchProducts = async (page = currentPage) => {
     try {
       setIsFetching(true);
@@ -189,7 +201,7 @@ const Shop = () => {
                       </div>
                       
                       {/* Price Range */}
-                      <div>
+                      {/* <div>
                         <h3 className="font-medium mb-2">Price Range</h3>
                         <div className="px-2">
                           <Slider
@@ -205,7 +217,7 @@ const Shop = () => {
                             <span>₹{priceRange[1]}</span>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                       
                       {/* Notes filter */}
                       <div>
@@ -306,7 +318,7 @@ const Shop = () => {
             </div>
             
             {/* Price Range */}
-            <div>
+            {/* <div>
               <h3 className="font-medium mb-2">Price Range</h3>
               <div className="px-2">
                 <Slider
@@ -323,7 +335,7 @@ const Shop = () => {
                 </div>
               </div>
             </div>
-            
+             */}
             <Separator />
             
             {/* Notes filter */}
