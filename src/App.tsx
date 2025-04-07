@@ -25,6 +25,9 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import Checkout from "./pages/Checkout";
 import UserOrders from "./pages/Order";
+import GiftingPage from "./pages/GiftingPage";
+import BulkEnquiryPage from "./pages/BulkEnquiryPage";
+import OurStoryPage from "./pages/OurStoryPage";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +54,10 @@ const App = () => (
             <Route path="/admin/customers" element={<AdminCustomers />} />
             <Route path="/admin/categories" element={<AdminCategories />} />
             <Route path="/admin/settings" element={<AdminSettings />} />
+            <Route path="/gifting" element={<GiftingPage />} />
+            <Route path="/bulk-enquiry" element={<BulkEnquiryPage />} />
+            <Route path="/our-story" element={<OurStoryPage />} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />

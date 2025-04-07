@@ -15,6 +15,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,11 +45,52 @@ const Navbar: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
-            <Link to="/" className="font-medium hover:text-primary transition-colors">Home</Link>
-            <Link to="/shop" className="font-medium hover:text-primary transition-colors">Shop</Link>
-            <Link to="/about" className="font-medium hover:text-primary transition-colors">About</Link>
-            <Link to="/contact" className="font-medium hover:text-primary transition-colors">Contact</Link>
+          <div className="hidden md:block">
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <Link to="/" className={navigationMenuTriggerStyle()}>
+                    Home
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link to="/shop" className={navigationMenuTriggerStyle()}>
+                    Shop
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link to="/gifting" className={navigationMenuTriggerStyle()}>
+                    Gifting
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link to="/bulk-enquiry" className={navigationMenuTriggerStyle()}>
+                    For Bulk Enquiry
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link to="/our-story" className={navigationMenuTriggerStyle()}>
+                    Our Story
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link to="/about" className={navigationMenuTriggerStyle()}>
+                    About
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link to="/contact" className={navigationMenuTriggerStyle()}>
+                    Contact
+                  </Link>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
           </div>
 
           {/* Desktop Actions */}
@@ -76,9 +126,6 @@ const Navbar: React.FC = () => {
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  {/* <DropdownMenuItem asChild>
-                    <Link to="/profile">Profile</Link>
-                  </DropdownMenuItem> */}
                   <DropdownMenuItem asChild>
                     <Link to="/orders">My Orders</Link>
                   </DropdownMenuItem>
@@ -162,6 +209,27 @@ const Navbar: React.FC = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Shop
+              </Link>
+              <Link 
+                to="/gifting" 
+                className="px-4 py-2 hover:bg-muted rounded-md transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Gifting
+              </Link>
+              <Link 
+                to="/bulk-enquiry" 
+                className="px-4 py-2 hover:bg-muted rounded-md transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                For Bulk Enquiry
+              </Link>
+              <Link 
+                to="/our-story" 
+                className="px-4 py-2 hover:bg-muted rounded-md transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Our Story
               </Link>
               <Link 
                 to="/about" 
